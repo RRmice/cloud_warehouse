@@ -1,5 +1,3 @@
-
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,11 +5,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
@@ -23,6 +22,11 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+    }
+
+    public void connectToServer(ActionEvent actionEvent){
+
         Network.start();
         Thread t = new Thread(() -> {
             try {
@@ -43,11 +47,36 @@ public class MainController implements Initializable {
         t.setDaemon(true);
         t.start();
         refreshLocalFilesList();
+
+    }
+
+    public void pressPushFileToServer(ActionEvent actionEvent){
+
+        if (tfFileName.getLength() > 0) {
+            String text = tfFileName.getText();
+
+            try {
+
+                Path path = Paths.get("client_storage", "/", text);
+                FileMessage fileMessage = new FileMessage(path);
+                Network.sendMsg(fileMessage);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            tfFileName.clear();
+        }
+
     }
 
     public void pressOnDownloadBtn(ActionEvent actionEvent) {
         if (tfFileName.getLength() > 0) {
-            Network.sendMsg(new FileRequest(tfFileName.getText()));
+            String text = tfFileName.getText();
+            FileRequest fileRequest = new FileRequest(text);
+            Network.sendMsg(fileRequest);
+
             tfFileName.clear();
         }
     }

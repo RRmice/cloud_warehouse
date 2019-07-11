@@ -2,6 +2,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
+import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -17,7 +18,16 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
                 }
             }
             if (msg instanceof FileMessage) {
-                // Что делать если прилетел файл ??
+
+                //System.out.println("Прилетел файл");
+                FileMessage fm = (FileMessage) msg;
+
+                String dir = "server_storage/" + fm.getFilename();
+
+                FileOutputStream fos = new FileOutputStream(dir);
+                fos.write(fm.getData());
+                fos.close();
+
             }
         } finally {
             ReferenceCountUtil.release(msg);
