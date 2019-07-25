@@ -3,6 +3,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
 
                 String[] arg = ((CommandRequest) msg).getArguments();
                 if (arg.length >= 2) {
-                    System.out.println("Попытка авторизации");
                     boolean result = authService.loginUser(ctx.channel(), arg[0], arg[1]);
                     if (result) {
                         ctx.writeAndFlush(new CommandRequest(CommandType.Authorization, "OK"));
@@ -45,8 +45,8 @@ public class MainHandler extends ChannelInboundHandlerAdapter {
             }
 
             if (msg instanceof FileMessage) {
-                String fileName = svm.fileMessage((FileMessage) msg);
-                authService.addFile(ctx.channel(), fileName);
+                File file = svm.fileMessage((FileMessage) msg).toFile();
+                authService.addFile(ctx.channel(), file.getName(), file.length());
             }
 
             if(msg instanceof CommandRequest){

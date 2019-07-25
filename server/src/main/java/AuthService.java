@@ -32,24 +32,23 @@ public class AuthService {
     public ArrayList<String> getUserFiles(Channel cn) throws SQLException{
 
         ArrayList<String> files = new ArrayList<>();
-        String request = String.format("select file_name from user_files where user = '%s'", activeUserList.get(cn));
+        String request = String.format("select file_name, file_size from user_files where user = '%s'", activeUserList.get(cn));
 
         ResultSet rs = stmt.executeQuery(request);
         while (rs.next()){
-            files.add(rs.getString("file_name"));
+            files.add(rs.getString("file_name")+"/"+ rs.getLong("file_size"));
         }
 
         return files;
     }
 
-    public void addFile(Channel cn, String file_name) throws SQLException{
-        String request = String.format("insert into user_files(user, file_name) values ('%s', '%s')", activeUserList.get(cn), file_name);
+    public void addFile(Channel cn, String file_name, long file_size) throws SQLException{
+        String request = String.format("insert into user_files(user, file_name, file_size) values ('%s', '%s', %s)",
+                activeUserList.get(cn), file_name, file_size);
         stmt.executeUpdate(request);
     }
 
     public void deleteFile(Channel cn, String file_name) throws SQLException{
-        System.out.println(activeUserList.get(cn) + " " + file_name);
-
         String request = String.format("delete from user_files where user = '%s' and file_name = '%s'", activeUserList.get(cn), file_name);
         stmt.executeUpdate(request);
     }

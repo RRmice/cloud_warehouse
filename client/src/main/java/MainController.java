@@ -137,7 +137,6 @@ public class MainController implements Initializable {
         if (Objects.isNull(text)) return;
 
         try {
-            System.out.println(text);
             Path path = Paths.get("client_storage", "/", text);
             FileMessage fileMessage = new FileMessage(path);
             Network.sendMsg(fileMessage);
@@ -191,8 +190,11 @@ public class MainController implements Initializable {
         updateUI(() -> {
             serverFilesList.getItems().clear();
             for (String str : read) {
-                System.out.println(str);
-                serverFilesList.getItems().addAll(new ViewFiles(str, "1"));
+
+                String[] strFile = str.split("/", 2);
+
+
+                serverFilesList.getItems().addAll(new ViewFiles(strFile[0], "1"));
             }
         });
     }

@@ -1,6 +1,7 @@
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ServersMessage {
@@ -20,7 +21,7 @@ public class ServersMessage {
         return fileMessage;
     }
 
-    public String fileMessage(FileMessage fileMessage){
+    public Path fileMessage(FileMessage fileMessage){
 
         String dir = "server_storage/" + fileMessage.getFilename();
         
@@ -30,7 +31,7 @@ public class ServersMessage {
             e.printStackTrace();
         }
 
-        return fileMessage.getFilename();
+        return Paths.get(dir);
     }
     
     
