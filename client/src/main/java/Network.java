@@ -13,9 +13,9 @@ public class Network {
 
     public static void start() {
         try {
-            socket = new Socket("localhost", 8190);
+            socket = new Socket("localhost", 8189);
             out = new ObjectEncoderOutputStream(socket.getOutputStream());
-            in = new ObjectDecoderInputStream(socket.getInputStream(), 50 * 1024 * 1024);
+            in = new ObjectDecoderInputStream(socket.getInputStream(), 100 * 1024 * 1024);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,4 +53,5 @@ public class Network {
         Object obj = in.readObject();
         return (AbstractMessage) obj;
     }
+
 }
