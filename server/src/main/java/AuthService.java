@@ -36,7 +36,7 @@ public class AuthService {
 
         ResultSet rs = stmt.executeQuery(request);
         while (rs.next()){
-            files.add(rs.getString("file_name")+"/"+ rs.getLong("file_size"));
+            files.add(rs.getString("file_name")+"%"+ rs.getLong("file_size"));
         }
 
         return files;

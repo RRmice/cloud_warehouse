@@ -190,11 +190,8 @@ public class MainController implements Initializable {
         updateUI(() -> {
             serverFilesList.getItems().clear();
             for (String str : read) {
-
-                String[] strFile = str.split("/", 2);
-
-
-                serverFilesList.getItems().addAll(new ViewFiles(strFile[0], "1"));
+                String[] strFile = str.split("%", 2);
+                serverFilesList.getItems().addAll(new ViewFiles(strFile[0], getFileSizeKiloBytes(Long.parseLong(strFile[1]))));
             }
         });
     }
